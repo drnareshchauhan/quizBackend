@@ -8,7 +8,7 @@ const passport = require('passport');
 const cors = require('cors');
 const cookieSession = require('cookie-session');
 const ipfilter = require('express-ipfilter').IpFilter;
-const rateLimit = require('express-rate-limit');
+//const rateLimit = require('express-rate-limit');
 const schedule = require('node-schedule');
 const sgMail = require('@sendgrid/mail');
 const emailTemplates = require('./Backend/emails/email');
@@ -50,10 +50,12 @@ mongoose.Promise = global.Promise;
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 console.log(Date.now());
-// app.use(cookieSession({
-//     maxAge: 24 * 60 * 60 * 1000,
-//     keys: [keys.cookieSession]
-// }));
+app.use(
+  cookieSession({
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: ['ncsjsajhkkjl'],
+  })
+);
 
 // const ips = ['172.67.176.16','104.24.123.191','104.24.122.191','10.41.141.207','10.63.249.212','10.69.232.242','108.162.194.81','162.159.38.81','172.64.34.81','172.64.33.140','173.245.59.140','108.162.193.140','162.243.166.170','157.245.130.6']
 // // // Create the server
@@ -63,14 +65,14 @@ console.log(Date.now());
 app.use(passport.initialize());
 app.use(passport.session());
 
-/////Rate Limiter
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 150, // limit each IP to 100 requests per windowMs
-});
+//Rate Limiter
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 150, // limit each IP to 100 requests per windowMs
+// });
 
 //  apply to all requests
-app.use(limiter);
+// app.use(limiter);
 
 // Allow CORS
 app.use((req, res, next) => {
@@ -141,11 +143,11 @@ schedule.scheduleJob(rule, async function () {
         to: user.email,
         from: process.env.sendgridEmail,
         subject: 'Quzzie: Quiz Reminder',
-        text: `This is an automatically genrated email sent from Quizzie. This is to remind you that your quiz ${
+        text: `This is an automatically genrated email sent from pSmCQ. This is to remind you that your MCQs ${
           quizzes[i].quizName
         } is scheduled at ${new Date(
           Number(quizzes[i].scheduledFor)
-        )}, Please login on time to not miss out on your quiz.`,
+        )}, Please login on time to not miss out on your MCQs.`,
       };
 
       sgMail

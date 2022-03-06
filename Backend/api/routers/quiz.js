@@ -358,7 +358,7 @@ router.patch(
 			.then(async (result1) => {
 				if (result1.adminId != req.user.userId) {
 					return res.status(401).json({
-						message: "This is not your quiz",
+						message: "This is not your MCQ",
 					});
 				}
 				const id = req.params.quizId;
@@ -397,11 +397,11 @@ router.get(
 			.then(async (result) => {
 				if (result.adminId == req.user.userId) {
 					return res.status(200).json({
-						message: "This is your quiz",
+						message: "This is your MCQs",
 					});
 				} else {
 					return res.status(401).json({
-						message: "This is not your quiz",
+						message: "This is not your MCQs",
 					});
 				}
 			})
